@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Train Ticket Booking - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-blue-100 to-purple-100 min-h-screen flex items-center justify-center">
+<div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md space-y-6">
+    <div class="text-center">
+        <h2 class="text-4xl font-bold text-blue-600 mb-2">Welcome Back</h2>
+        <p class="text-gray-600">Sign in to continue your journey</p>
+    </div>
+
+    <form id="loginForm" class="space-y-5">
+        <div>
+            <input type="text" 
+            name="userid" 
+            placeholder="User ID" 
+            required
+                   class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-0">
+        </div>
+
+        <div>
+            <input type="password"
+             name="password"
+              placeholder="Password" 
+              required
+                   class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-0">
+        </div>
+
+        <button type="submit"
+                class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 
+                       text-white py-3 rounded-lg font-bold text-lg transition-all">
+            Sign In
+        </button>
+    </form>
+
+    <div class="text-center text-sm text-gray-600">
+        Don't have an account? 
+        <a href="signup.html" class="text-blue-600 hover:text-blue-800 font-semibold">Create Account</a>
+    </div>
+
+    <p id="loginResponse" class="text-center text-sm"></p>
+</div>
+
+<script>
+    const loginForm = document.getElementById('loginForm');
+    const responseMsg = document.getElementById('loginResponse');
+
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        responseMsg.textContent = "Login functionality to be implemented";
+        responseMsg.classList.add("text-red-500");
+    });
+</script>
+</body>
+</html>

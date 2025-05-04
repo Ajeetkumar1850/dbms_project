@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Train Ticket Booking - Signup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-purple-100 to-blue-100 min-h-screen flex items-center justify-center">
+<div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md space-y-6">
+    <div class="text-center">
+        <h2 class="text-4xl font-bold text-purple-600 mb-2">Create Account</h2>
+        <p class="text-gray-600">Start your travel journey with us</p>
+    </div>
+
+    <form id="signupForm" class="space-y-5">
+        <div>
+            <input type="text" 
+                    name="userid"
+                     placeholder="User ID" 
+                     required
+                   class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-purple-500 focus:ring-0">
+        </div>
+
+        <div>
+            <input type="text" 
+            name="name" 
+            placeholder="Full Name" 
+            required
+                   class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-purple-500 focus:ring-0">
+        </div>
+
+        <div>
+            <input type="email" 
+            name="email" 
+            placeholder="Email Address" 
+            required
+                   class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-purple-500 focus:ring-0">
+        </div>
+
+        <div>
+            <input type="tel" 
+            name="phone" 
+            placeholder="Phone Number" 
+            required
+                   class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-purple-500 focus:ring-0">
+        </div>
+
+        <div>
+            <input type="password" 
+            name="password" 
+            placeholder="Create Password" 
+            required
+                   class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-purple-500 focus:ring-0">
+        </div>
+
+        <button type="submit"
+                class="w-full bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700 
+                       text-white py-3 rounded-lg font-bold text-lg transition-all">
+            Get Started
+        </button>
+    </form>
+
+    <div class="text-center text-sm text-gray-600">
+        Already have an account? 
+        <a href="login.html" class="text-purple-600 hover:text-purple-800 font-semibold">Sign In</a>
+    </div>
+
+    <p id="signupResponse" class="text-center text-sm"></p>
+</div>
+<script>
+    const signupForm = document.getElementById('signupForm');
+    const responseMsg = document.getElementById('signupResponse');
+    signupForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        responseMsg.textContent = "Signup functionality to be implemented";
+        responseMsg.classList.add("text-red-500");
+    });
+</script>
+</body>
+</html>

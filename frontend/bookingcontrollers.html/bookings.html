@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RailExpress - My Bookings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <!-- Navigation (same as index.html) -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+        <!-- Copy the same nav from index.html -->
+    </nav>
+
+    <!-- My Bookings Section -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="mb-4"><i class="bi bi-journal-text"></i> My Bookings</h2>
+            
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search bookings...">
+                        <button class="btn btn-outline-secondary" type="button">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="btn-group">
+                        <button class="btn btn-outline-secondary">All</button>
+                        <button class="btn btn-outline-success">Confirmed</button>
+                        <button class="btn btn-outline-warning">Waiting</button>
+                        <button class="btn btn-outline-danger">Cancelled</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <!-- Booking Card 1 -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card booking-card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="badge bg-success status-badge">Confirmed</span>
+                                <small class="text-muted">Booked on: 2023-08-01</small>
+                            </div>
+                            <h5 class="card-title">TRN789 - New York to Washington DC</h5>
+                            <p class="card-text">
+                                <i class="bi bi-calendar"></i> <strong>Date:</strong> 2023-08-15<br>
+                                <i class="bi bi-people"></i> <strong>Passengers:</strong> 2<br>
+                                <i class="bi bi-ticket"></i> <strong>Class:</strong> Business
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">Booking ID: BK123456</h6>
+                                <a href="cancel.html" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-x-circle"></i> Cancel
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Booking Card 2 -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card booking-card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="badge bg-warning text-dark status-badge">Waiting</span>
+                                <small class="text-muted">Booked on: 2023-08-05</small>
+                            </div>
+                            <h5 class="card-title">TRN456 - Boston to Philadelphia</h5>
+                            <p class="card-text">
+                                <i class="bi bi-calendar"></i> <strong>Date:</strong> 2023-08-20<br>
+                                <i class="bi bi-people"></i> <strong>Passengers:</strong> 1<br>
+                                <i class="bi bi-ticket"></i> <strong>Class:</strong> Economy
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">Booking ID: BK654321</h6>
+                                <a href="cancel.html" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-x-circle"></i> Cancel
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Booking Card 3 -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card booking-card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="badge bg-danger status-badge">Cancelled</span>
+                                <small class="text-muted">Booked on: 2023-07-25</small>
+                            </div>
+                            <h5 class="card-title">TRN123 - Chicago to St. Louis</h5>
+                            <p class="card-text">
+                                <i class="bi bi-calendar"></i> <strong>Date:</strong> 2023-07-30<br>
+                                <i class="bi bi-people"></i> <strong>Passengers:</strong> 3<br>
+                                <i class="bi bi-ticket"></i> <strong>Class:</strong> First Class
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">Booking ID: BK789012</h6>
+                                <span class="text-muted">Refund processed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (same as index.html) -->
+    <footer class="bg-dark text-white py-4">
+        <!-- Copy the same footer from index.html -->
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
