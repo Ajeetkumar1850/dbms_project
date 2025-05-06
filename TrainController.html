@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Admin Navigation -->
+    <nav class="bg-blue-800 text-white p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-train text-2xl"></i>
+                <span class="text-xl font-bold">Railway Admin</span>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#" class="hover:text-blue-200">Dashboard</a>
+                <a href="#" class="font-bold text-blue-300">Trains</a>
+                <a href="#" class="hover:text-blue-200">Schedules</a>
+                <a href="#" class="hover:text-blue-200">Users</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 md:p-6">
+        <!-- Tab Navigation -->
+        <div class="flex border-b border-gray-200 mb-6">
+            <button id="createTrainTab" class="tab-button active" onclick="switchTab('createTrain')">
+                <i class="fas fa-plus-circle mr-2"></i> Add Train
+            </button>
+            <button id="searchTrainTab" class="tab-button" onclick="switchTab('searchTrain')">
+                <i class="fas fa-search mr-2"></i> Find Train
+            </button>
+            <button id="scheduleTab" class="tab-button" onclick="switchTab('schedule')">
+                <i class="fas fa-calendar-alt mr-2"></i> Schedules
+            </button>
+        </div>
+
+        <!-- Create Train Section -->
+        <div id="createTrain" class="tab-content active">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-600 to-blue-700 p-6 text-white">
+                    <h2 class="text-2xl font-bold flex items-center gap-3">
+                        <i class="fas fa-train"></i>
+                        <span>Add New Train</span>
+                    </h2>
+                </div>
+
+                <form id="createTrainForm" class="p-6 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1">Train Number*</label>
+                            <input type="text" name="trainNumber" placeholder="e.g. 12951" required
+                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1">Train Name*</label>
+                            <input type="text" name="trainName" placeholder="e.g. Rajdhani Express" required
+                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1">Source Station*</label>
+                            <input type="text" name="source" placeholder="Starting station" required
+                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1">Destination Station*</label>
+                            <input type="text" name="destination" placeholder="Final station" required
+                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1">Total Distance (km)*</label>
+                            <input type="number" name="distance" placeholder="Distance in km" required
+                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-1">Train Type</label>
+                        <select name="trainType" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="EXPRESS">Express</option>
+                            <option value="SUPERFAST">Superfast</option>
+                            <option value="RAJDHANI">Rajdhani</option>
+                            <option value="SHATABDI">Shatabdi</option>
+                            <option value="PASSENGER">Passenger</option>
+                        </select>
+                    </div>
+
+                    <button type="submit"
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-bold text-lg transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+                        <i class="fas fa-save"></i>
+                        <span>Create Train</span>
+                    </button>
+                </form>
+
+                <div id="createResponse" class="px-6 pb-6 hidden">
+                    <div id="createSuccess" class="bg-green-50 border-l-4 border-green-500 p-4 hidden">
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-3 text-xl"></i>
+                            <div>
+                                <h3 class="font-medium text-green-800">Train Created Successfully</h3>
+                                <p id="successTrainDetails" class="text-sm text-green-700 mt-1"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="createError" class="bg-red-50 border-l-4 border-red-500 p-4 hidden">
+                        <div class="flex items-center">
+                            <i class="fas fa-exclamation-circle text-red-500 mr-3 text-xl"></i>
+                            <div>
+                                <h3 class="font-medium text-red-800">Error Creating Train</h3>
+                                <p id="errorTrainDetails" class="text-sm text-red-700 mt-1"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Train Section -->
+        <div id="searchTrain" class="tab-content hidden">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-600 to-blue-700 p-6 text-white">
+                    <h2 class="text-2xl font-bold flex items-center gap-3">
+                        <i class="fas fa-search"></i>
+                        <span>Find Train</span>
+                    </h2>
+                </div>
+
+                <div class="p-6">
+                    <form id="searchTrainForm" class="flex gap-2 mb-6">
+                        <input type="text" id="searchTrainNumber" placeholder="Enter train number" required
+                               class="flex-grow px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <button type="submit"
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all">
+                            Search
+                        </button>
+                    </form>
+
+                    <div id="trainDetails" class="hidden">
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 id="trainNameDisplay" class="text-xl font-bold text-gray-800"></h3>
+                                    <p id="trainNumberDisplay" class="text-gray-600"></p>
+                                </div>
+                                <span id="trainTypeDisplay" class="px-3 py-1 rounded-full text-xs font-semibold"></span>
+                            </div>
+
+                            <div class="mt-4 grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-gray-500 text-sm">Source</p>
+                                    <p id="trainSource" class="font-medium"></p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-sm">Destination</p>
+                                    <p id="trainDestination" class="font-medium"></p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-sm">Distance</p>
+                                    <p id="trainDistance" class="font-medium"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="trainNotFound" class="hidden text-center py-8">
+                        <i class="fas fa-train text-4xl text-gray-300 mb-3"></i>
+                        <p class="text-gray-500">No train found with this number</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule Section -->
+        <div id="schedule" class="tab-content hidden">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-600 to-blue-700 p-6 text-white">
+                    <h2 class="text-2xl font-bold flex items-center gap-3">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Train Schedule</span>
+                    </h2>
+                </div>
+
+                <div class="p-6">
+                    <form id="scheduleForm" class="flex gap-2 mb-6">
+                        <input type="text" id="scheduleTrainNumber" placeholder="Enter train number" required
+                               class="flex-grow px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <button type="submit"
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all">
+                            Get Schedule
+                        </button>
+                    </form>
+
+                    <div id="scheduleResults" class="hidden">
+                        <h3 id="scheduleTrainName" class="text-lg font-bold mb-4"></h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Station</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Arrival</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Departure</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Day</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="scheduleTableBody" class="bg-white divide-y divide-gray-200">
+                                    <!-- Schedule items will be inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="noScheduleFound" class="hidden text-center py-8">
+                        <i class="fas fa-calendar-times text-4xl text-gray-300 mb-3"></i>
+                        <p class="text-gray-500">No schedule found for this train</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Hide all tab contents and deactivate all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+                tab.classList.add('hidden');
+            });
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active', 'border-blue-600', 'text-blue-600');
+                button.classList.add('text-gray-600', 'hover:text-gray-800');
+            });
+
+            // Show selected tab and activate button
+            document.getElementById(tabName).classList.remove('hidden');
+            document.getElementById(tabName).classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.add('active', 'border-blue-600', 'text-blue-600');
+            document.getElementById(tabName + 'Tab').classList.remove('text-gray-600', 'hover:text-gray-800');
+        }
+
+        // Create Train Form Submission
+        document.getElementById('createTrainForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = {};
+            formData.forEach((value, key) => data[key] = value);
+            
+            // Reset messages
+            document.getElementById('createResponse').classList.remove('hidden');
+            document.getElementById('createSuccess').classList.add('hidden');
+            document.getElementById('createError').classList.add('hidden');
+            
+            try {
+                const response = await fetch('/train/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    const train = await response.json();
+                    document.getElementById('successTrainDetails').textContent = 
+                        `${train.trainName} (${train.trainNumber}) created successfully.`;
+                    document.getElementById('createSuccess').classList.remove('hidden');
+                    e.target.reset();
+                } else {
+                    const error = await response.text();
+                    document.getElementById('errorTrainDetails').textContent = 
+                        error || 'Error creating train. Please try again.';
+                    document.getElementById('createError').classList.remove('hidden');
+                }
+            } catch (error) {
+                document.getElementById('errorTrainDetails').textContent = 
+                    'Network error. Please check your connection.';
+                document.getElementById('createError').classList.remove('hidden');
+                console.error('Create train error:', error);
+            }
+        });
+
+        // Search Train Form Submission
+        document.getElementById('searchTrainForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const trainNumber = document.getElementById('searchTrainNumber').value.trim();
+            
+            document.getElementById('trainDetails').classList.add('hidden');
+            document.getElementById('trainNotFound').classList.add('hidden');
+            
+            try {
+                const response = await fetch(`/train/${trainNumber}`);
+                
+                if (response.ok) {
+                    const train = await response.json();
+                    
+                    // Display train details
+                    document.getElementById('trainNameDisplay').textContent = train.trainName;
+                    document.getElementById('trainNumberDisplay').textContent = `#${train.trainNumber}`;
+                    document.getElementById('trainTypeDisplay').textContent = train.trainType;
+                    document.getElementById('trainTypeDisplay').className = 
+                        `px-3 py-1 rounded-full text-xs font-semibold ${getTrainTypeClass(train.trainType)}`;
+                    document.getElementById('trainSource').textContent = train.source;
+                    document.getElementById('trainDestination').textContent = train.destination;
+                    document.getElementById('trainDistance').textContent = `${train.distance} km`;
+                    
+                    document.getElementById('trainDetails').classList.remove('hidden');
+                } else {
+                    document.getElementById('trainNotFound').classList.remove('hidden');
+                }
+            } catch (error) {
+                document.getElementById('trainNotFound').classList.remove('hidden');
+                console.error('Search train error:', error);
+            }
+        });
+
+        // Get Schedule Form Submission
+        document.getElementById('scheduleForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const trainNumber = document.getElementById('scheduleTrainNumber').value.trim();
+            
+            document.getElementById('scheduleResults').classList.add('hidden');
+            document.getElementById('noScheduleFound').classList.add('hidden');
+            
+            try {
+                const response = await fetch(`/train/${trainNumber}/schedule`);
+                
+                if (response.ok) {
+                    const schedule = await response.json();
+                    const trainResponse = await fetch(`/train/${trainNumber}`);
+                    
+                    if (trainResponse.ok) {
+                        const train = await trainResponse.json();
+                        document.getElementById('scheduleTrainName').textContent = 
+                            `${train.trainName} (${train.trainNumber}) Schedule`;
+                    }
+                    
+                    const tableBody = document.getElementById('scheduleTableBody');
+                    tableBody.innerHTML = '';
+                    
+                    schedule.forEach(item => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td class="px-6 py-4 whitespace-nowrap">${item.stationName}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${item.arrivalTime || '-'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">${item.departureTime || '-'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Day ${item.day}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                    
+                    document.getElementById('scheduleResults').classList.remove('hidden');
+                } else {
+                    document.getElementById('noScheduleFound').classList.remove('hidden');
+                }
+            } catch (error) {
+                document.getElementById('noScheduleFound').classList.remove('hidden');
+                console.error('Get schedule error:', error);
+            }
+        });
+
+        // Helper function for train type styling
+        function getTrainTypeClass(type) {
+            const classes = {
+                'EXPRESS': 'bg-orange-100 text-orange-800',
+                'SUPERFAST': 'bg-purple-100 text-purple-800',
+                'RAJDHANI': 'bg-red-100 text-red-800',
+                'SHATABDI': 'bg-blue-100 text-blue-800',
+                'PASSENGER': 'bg-green-100 text-green-800'
+            };
+            return classes[type] || 'bg-gray-100 text-gray-800';
+        }
+    </script>
+</body>
+</html>
