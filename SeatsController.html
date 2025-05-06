@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Seat Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Admin Navigation -->
+    <nav class="bg-blue-800 text-white p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-train text-2xl"></i>
+                <span class="text-xl font-bold">Railway Admin</span>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#" class="hover:text-blue-200">Dashboard</a>
+                <a href="#" class="hover:text-blue-200">Trains</a>
+                <a href="#" class="font-bold text-blue-300">Seats</a>
+                <a href="#" class="hover:text-blue-200">Users</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 md:p-6">
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-blue-600 to-blue-700 p-6 text-white">
+                <h1 class="text-2xl font-bold flex items-center gap-3">
+                    <i class="fas fa-chair"></i>
+                    <span>Seat Configuration</span>
+                </h1>
+                <p class="text-blue-100">Create seats for your trains</p>
+            </div>
+
+            <!-- Main Content -->
+            <div class="p-6">
+                <div class="max-w-lg mx-auto">
+                    <form id="seatCreationForm" class="space-y-6">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Train Number</label>
+                            <div class="relative">
+                                <input type="text" id="trainNumber" placeholder="Enter train number (e.g. 12951)" required
+                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pl-12">
+                                <i class="fas fa-train absolute left-3 top-3.5 text-gray-400"></i>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1">Enter the exact train number you want to configure seats for</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Number of Coaches</label>
+                                <select class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="10">10 Coaches</option>
+                                    <option value="12">12 Coaches</option>
+                                    <option value="15">15 Coaches</option>
+                                    <option value="18">18 Coaches</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Seats per Coach</label>
+                                <select class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="72">72 Seats (Standard)</option>
+                                    <option value="78">78 Seats (Express)</option>
+                                    <option value="60">60 Seats (Luxury)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="pt-4">
+                            <button type="submit"
+                                    class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-bold text-lg transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Generate Seats</span>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Response Section -->
+                    <div id="responseSection" class="mt-8 hidden">
+                        <div id="successAlert" class="bg-green-50 border-l-4 border-green-500 p-4 hidden">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-check-circle text-green-500 text-xl mt-1 mr-3"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-medium text-green-800">Success!</h3>
+                                    <div class="mt-2 text-sm text-green-700">
+                                        <p id="successMessage">Seats have been successfully created for train <span id="successTrainNumber" class="font-bold"></span>.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="errorAlert" class="bg-red-50 border-l-4 border-red-500 p-4 hidden">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-exclamation-circle text-red-500 text-xl mt-1 mr-3"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-medium text-red-800">Error</h3>
+                                    <div class="mt-2 text-sm text-red-700">
+                                        <p id="errorMessage">There was an error creating seats. Please try again.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('seatCreationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const trainNumber = document.getElementById('trainNumber').value.trim();
+            const responseSection = document.getElementById('responseSection');
+            const successAlert = document.getElementById('successAlert');
+            const errorAlert = document.getElementById('errorAlert');
+            
+            // Hide previous alerts
+            successAlert.classList.add('hidden');
+            errorAlert.classList.add('hidden');
+            
+            try {
+                const response = await fetch(`/seats/create/${trainNumber}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    // Success case (201 Created)
+                    document.getElementById('successTrainNumber').textContent = trainNumber;
+                    successAlert.classList.remove('hidden');
+                    responseSection.classList.remove('hidden');
+                    
+                    // Clear form
+                    document.getElementById('seatCreationForm').reset();
+                    
+                    // Hide success message after 5 seconds
+                    setTimeout(() => {
+                        successAlert.classList.add('hidden');
+                    }, 5000);
+                } else {
+                    // Error case
+                    const errorText = await response.text();
+                    document.getElementById('errorMessage').textContent = 
+                        errorText || 'Failed to create seats. Please check the train number.';
+                    errorAlert.classList.remove('hidden');
+                    responseSection.classList.remove('hidden');
+                }
+            } catch (error) {
+                // Network error
+                document.getElementById('errorMessage').textContent = 
+                    'Network error. Please check your connection.';
+                errorAlert.classList.remove('hidden');
+                responseSection.classList.remove('hidden');
+                console.error('Seat creation error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
