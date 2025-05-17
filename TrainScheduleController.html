@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Schedule Management</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .schedule-item {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            border-left: 4px solid #3498db;
+        }
+        .schedule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .remove-btn {
+            background-color: #e74c3c;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        .remove-btn:hover {
+            background-color: #c0392b;
+        }
+        .add-btn {
+            background-color: #2ecc71;
+            margin-top: 10px;
+        }
+        .add-btn:hover {
+            background-color: #27ae60;
+        }
+        .message {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .station-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        .station-row input {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Create Train Schedule</h1>
+        
+        <div id="message" class="message" style="display: none;"></div>
+        
+        <div class="form-group">
+            <label for="trainNo">Train Number</label>
+            <input type="text" id="trainNo" placeholder="Enter train number">
+        </div>
+        
+        <div id="schedules-container">
+            <div class="schedule-item">
+                <div class="schedule-header">
+                    <h3>Schedule Entry #1</h3>
+                    <button class="remove-btn" onclick="removeSchedule(this)">Remove</button>
+                </div>
+                <div class="form-group">
+                    <label>Station Sequence</label>
+                    <div id="stations-1">
+                        <div class="station-row">
+                            <input type="text" placeholder="Station code" class="station-code">
+                            <input type="time" class="arrival-time">
+                            <input type="time" class="departure-time">
+                            <input type="number" placeholder="Day" class="day" min="1">
+                        </div>
+                    </div>
+                    <button class="add-btn" onclick="addStationRow(1)">Add Station</button>
+                </div>
+            </div>
+        </div>
+        
+        <button class="add-btn" onclick="addSchedule()">Add Another Schedule</button>
+        <button onclick="submitSchedule()">Submit Schedule</button>
+    </div>
+
+    <script>
+        let scheduleCount = 1;
+        
+        function addSchedule() {
+            scheduleCount++;
+            const container = document.getElementById('schedules-container');
+            
+            const newSchedule = document.createElement('div');
+            newSchedule.className = 'schedule-item';
+            newSchedule.innerHTML = `
+                <div class="schedule-header">
+                    <h3>Schedule Entry #${scheduleCount}</h3>
+                    <button class="remove-btn" onclick="removeSchedule(this)">Remove</button>
+                </div>
+                <div class="form-group">
+                    <label>Station Sequence</label>
+                    <div id="stations-${scheduleCount}">
+                        <div class="station-row">
+                            <input type="text" placeholder="Station code" class="station-code">
+                            <input type="time" class="arrival-time">
+                            <input type="time" class="departure-time">
+                            <input type="number" placeholder="Day" class="day" min="1">
+                        </div>
+                    </div>
+                    <button class="add-btn" onclick="addStationRow(${scheduleCount})">Add Station</button>
+                </div>
+            `;
+            
+            container.appendChild(newSchedule);
+        }
+        
+        function addStationRow(scheduleId) {
+            const container = document.getElementById(`stations-${scheduleId}`);
+            const stationCount = container.children.length + 1;
+            
+            const newRow = document.createElement('div');
+            newRow.className = 'station-row';
+            newRow.innerHTML = `
+                <input type="text" placeholder="Station code" class="station-code">
+                <input type="time" class="arrival-time">
+                <input type="time" class="departure-time">
+                <input type="number" placeholder="Day" class="day" min="1">
+            `;
+            
+            container.appendChild(newRow);
+        }
+        
+        function removeSchedule(button) {
+            if (document.querySelectorAll('.schedule-item').length > 1) {
+                button.closest('.schedule-item').remove();
+                // Renumber remaining schedules
+                const schedules = document.querySelectorAll('.schedule-item');
+                schedules.forEach((schedule, index) => {
+                    schedule.querySelector('h3').textContent = `Schedule Entry #${index + 1}`;
+                });
+            } else {
+                alert("You must have at least one schedule entry.");
+            }
+        }
+        
+        function submitSchedule() {
+            const trainNo = document.getElementById('trainNo').value.trim();
+            if (!trainNo) {
+                showMessage('Please enter a train number', 'error');
+                return;
+            }
+            
+            const scheduleItems = document.querySelectorAll('.schedule-item');
+            const schedules = [];
+            
+            scheduleItems.forEach((item, index) => {
+                const stationRows = item.querySelectorAll('.station-row');
+                const stations = [];
+                
+                stationRows.forEach(row => {
+                    const stationCode = row.querySelector('.station-code').value.trim();
+                    const arrivalTime = row.querySelector('.arrival-time').value;
+                    const departureTime = row.querySelector('.departure-time').value;
+                    const day = row.querySelector('.day').value;
+                    
+                    if (stationCode && arrivalTime && departureTime && day) {
+                        stations.push({
+                            stationCode: stationCode,
+                            arrivalTime: arrivalTime,
+                            departureTime: departureTime,
+                            day: parseInt(day)
+                        });
+                    }
+                });
+                
+                if (stations.length > 0) {
+                    schedules.push(stations);
+                }
+            });
+            
+            if (schedules.length === 0) {
+                showMessage('Please add at least one valid station sequence', 'error');
+                return;
+            }
+            
+            // Prepare the data for API call
+            const requestData = {
+                trainNo: trainNo,
+                schedules: schedules
+            }            showMessage('Creating schedule...', 'success');
+            
+            console.log('Submitting:', requestData);
+            
+          
+            setTimeout(() => {
+                showMessage('Schedule created successfully for train ' + trainNo, 'success');
+            }, 1500);
+        }
+        
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = 'message ' + type;
+            messageDiv.style.display = 'block';
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
