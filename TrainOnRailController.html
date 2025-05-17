@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train On Rail Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .train-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .train-table th, .train-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .train-table th {
+            background-color: #3498db;
+            color: white;
+        }
+        .train-table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .status-ontime {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .status-delayed {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #7f8c8d;
+        }
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Train On Rail Details</h1>
+        
+        <div id="loading" class="loading">
+            Loading train details...
+        </div>
+        
+        <div id="error" class="error" style="display: none;">
+            Error loading train details. Please try again later.
+        </div>
+        
+        <table class="train-table" id="trainTable" style="display: none;">
+            <thead>
+                <tr>
+                    <th>Train No.</th>
+                    <th>Train Name</th>
+                    <th>Departure</th>
+                    <th>Arrival</th>
+                    <th>Current Location</th>
+                    <th>Status</th>
+                    <th>Delay (min)</th>
+                </tr>
+            </thead>
+            <tbody id="trainData">
+                <!-- Data will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // This would be replaced with actual API call to your controller
+        // For demo purposes, we'll use mock data
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate API call delay
+            setTimeout(function() {
+                // Hide loading
+                document.getElementById('loading').style.display = 'none';
+                
+                // Mock data - in real app this would come from your Spring Boot controller
+                const mockTrains = [
+                    {
+                        trainNo: "12301",
+                        name: "Rajdhani Express",
+                        departure: "Delhi (08:00)",
+                        arrival: "Mumbai (16:00)",
+                        currentLocation: "Vadodara",
+                        status: "On Time",
+                        delay: 0
+                    },
+                    {
+                        trainNo: "12951",
+                        name: "Mumbai Rajdhani",
+                        departure: "Mumbai (17:00)",
+                        arrival: "Delhi (08:30)",
+                        currentLocation: "Surat",
+                        status: "Delayed",
+                        delay: 45
+                    },
+                    {
+                        trainNo: "12309",
+                        name: "Rajendra Nagar Express",
+                        departure: "Patna (22:30)",
+                        arrival: "New Delhi (10:00)",
+                        currentLocation: "Allahabad",
+                        status: "On Time",
+                        delay: 0
+                    },
+                    {
+                        trainNo: "12957",
+                        name: "Swarna Jayanti Express",
+                        departure: "Ahmedabad (06:15)",
+                        arrival: "New Delhi (20:45)",
+                        currentLocation: "Jaipur",
+                        status: "Delayed",
+                        delay: 30
+                    }
+                ];
+                
+                // Populate table
+                const tableBody = document.getElementById('trainData');
+                mockTrains.forEach(train => {
+                    const row = document.createElement('tr');
+                    
+                    row.innerHTML = `
+                        <td>${train.trainNo}</td>
+                        <td>${train.name}</td>
+                        <td>${train.departure}</td>
+                        <td>${train.arrival}</td>
+                        <td>${train.currentLocation}</td>
+                        <td><span class="status ${train.status === 'On Time' ? 'status-ontime' : 'status-delayed'}">${train.status}</span></td>
+                        <td>${train.delay}</td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                });
+                
+                // Show table
+                document.getElementById('trainTable').style.display = 'table';
+                
+            }, 1500);
+          
+        });
+    </script>
+</body>
+</html>
